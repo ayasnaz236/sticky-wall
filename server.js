@@ -277,7 +277,7 @@ io.on("connection", (socket) => {
 
 server.listen(PORT, () => {
   const ip = getLocalIp();
-  console.log(`\n=== Sticky Wall Server running ===`);
+  console.log(`\n=== Wish Wall Server running ===`);
   console.log(`Local:   http://localhost:${PORT}`);
   console.log(`Network: http://${ip}:${PORT}`);
   console.log(`Notes are being saved permanently to: ${ARCHIVE_DIR}\n`);

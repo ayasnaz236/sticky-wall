@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sticky Wall</title>
+<title>Wish Wall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -132,22 +132,25 @@
     transition: opacity 0.12s ease, filter 0.12s ease;
   }
 
-  /* The person's typed name: a label UNDER the note (not on the paper).
-     Only ever shown after End is pressed (grid tiles + the big popup);
-     the live scrolling notes never show it. */
+  /* The person's typed name, written on the note itself in the bottom-left
+     corner. Shown on the live scrolling notes AND in the End grid + popup. */
   .note-label {
-    position: absolute; left: 0; right: 0; top: calc(100% - 8px);
+    position: absolute; left: 26px; bottom: 30px;
+    max-width: 58%;
     overflow: hidden;
-    text-align: center; white-space: nowrap; text-overflow: ellipsis;
+    white-space: nowrap; text-overflow: ellipsis;
     pointer-events: none;
     font-family: "Caveat", "Comic Sans MS", cursive;
-    font-size: clamp(15px, 1.7vw, 24px); font-weight: 700; line-height: 1.15;
-    color: #f4efdc;
+    font-size: 24px; font-weight: 700; line-height: 1.1;
+    color: #2d2200;
+  }
+  .grid-note .note-label {
+    left: 12%; bottom: 11%;
+    font-size: clamp(14px, 1.6vw, 24px);
   }
   .hover-zoom .note-label {
-    top: calc(100% - 26px);
-    font-size: clamp(28px, 4vw, 44px);
-    text-shadow: 0 2px 10px rgba(0,0,0,.7);
+    left: 64px; bottom: 58px;
+    font-size: clamp(30px, 4.2vw, 46px);
   }
   /* Moderation: small red X, shown on the selected tile. */
   .del-btn {
@@ -235,12 +238,18 @@
     backdrop-filter: none;
   }
   .wall-brand { display: flex; align-items: center; gap: 14px; }
+  /* Logo sits dead-center of the header, just below the light; the
+     "Wish Wall" title takes the spot on the left where the logo used to be. */
   .wall-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: block;
-    width: 110px;
-    height: 46px;
-    flex: 0 0 auto;
+    width: 130px;
+    height: 54px;
     object-fit: contain;
+    pointer-events: none;
   }
   .wall-title { margin: 0; color: var(--wall-ink); font-family: "Caveat", "Comic Sans MS", cursive; font-size: 30px; font-weight: 700; letter-spacing: 0; line-height: 1; }
   .wall-subtitle { margin-top: 3px; color: var(--wall-muted); font-size: 12px; font-weight: 500; letter-spacing: .025em; }
@@ -353,12 +362,12 @@
 <body>
   <div class="header">
     <div class="wall-brand">
-      <img class="wall-mark" src="/images/Logo.png" alt="Endiya logo" />
       <div>
-        <h1 class="wall-title">Sticky Wall</h1>
+        <h1 class="wall-title">Wish Wall</h1>
         <div class="wall-subtitle">A little corner for big feelings</div>
       </div>
     </div>
+    <img class="wall-mark" src="/images/Logo.png" alt="Endiya logo" />
     <div class="header-tools">
       <div class="wall-meta">
         <span class="wall-mode" id="wallMode">Live wall</span>
@@ -448,18 +457,20 @@
       return div.innerHTML;
     }
 
-    // Live scrolling note: just the wish, NO name (names only appear
-    // once the session is ended - see gridNoteHtml / paintHoverZoom).
+    // Live scrolling note: the wish plus the person's name, bottom-left.
     function noteHtml(note) {
       const rotation = (Math.random() * 6 - 3).toFixed(1);
       const content = note.image
         ? `<img src="${note.image}" alt="" />`
         : escapeHtml(note.text || "");
-      return `<div class="note ${note.color || "yellow"}" style="transform:rotate(${rotation}deg)">${content}</div>`;
+      const name = note.name
+        ? `<div class="note-label">${escapeHtml(note.name)}</div>`
+        : "";
+      return `<div class="note ${note.color || "yellow"}" style="transform:rotate(${rotation}deg)">${content}${name}</div>`;
     }
 
-    // The wish content + (if this note has one) the typed name as a
-    // label under the note. Used by the ended grid and hover popup.
+    // The wish content + (if this note has one) the typed name on the
+    // note (bottom-left). Used by the ended grid and hover popup.
     function noteContentWithName(note) {
       const wish = note.image
         ? `<img class="wish" src="${note.image}" alt="" />`
@@ -541,20 +552,19 @@
       const columnGap = parseFloat(style.columnGap);
       const rowGap = parseFloat(style.rowGap);
       const noteAspect = 1.036;
-      const labelH = 28; // room under every note for the name label
       let best = { cols: 1, width: 0 };
 
       for (let cols = 1; cols <= allNotes.length; cols++) {
         const rows = Math.ceil(allNotes.length / cols);
         const cellWidth = (availableWidth - columnGap * (cols - 1)) / cols;
         const cellHeight = (availableHeight - rowGap * (rows - 1)) / rows;
-        const noteWidth = Math.min(cellWidth, (cellHeight - labelH) * noteAspect);
+        const noteWidth = Math.min(cellWidth, cellHeight * noteAspect);
         if (noteWidth > best.width) best = { cols, width: noteWidth };
       }
 
       const noteHeight = best.width / noteAspect;
       gridWall.style.gridTemplateColumns = `repeat(${best.cols}, minmax(0, 1fr))`;
-      gridWall.style.gridAutoRows = `${noteHeight + labelH}px`;
+      gridWall.style.gridAutoRows = `${noteHeight}px`;
       gridWall.style.setProperty("--grid-note-width", `${best.width}px`);
       gridWall.style.setProperty("--grid-note-height", `${noteHeight}px`);
       gridWall.innerHTML = allNotes.map(gridNoteHtml).join("");
