@@ -231,7 +231,7 @@
     font-family: "Quicksand", "Avenir Next", Avenir, "Segoe UI", sans-serif;
   }
   .header {
-    top: clamp(36px, calc(3.5vh + 10px), 50px);
+    top: clamp(58px, calc(3.5vh + 32px), 72px);
     padding: 8px clamp(36px, 5vw, 72px);
     background: none;
     opacity: 1;
@@ -251,8 +251,8 @@
     object-fit: contain;
     pointer-events: none;
   }
-  .wall-title { margin: 0; color: var(--wall-ink); font-family: "Caveat", "Comic Sans MS", cursive; font-size: 30px; font-weight: 700; letter-spacing: 0; line-height: 1; }
-  .wall-subtitle { margin-top: 3px; color: var(--wall-muted); font-size: 12px; font-weight: 500; letter-spacing: .025em; }
+  .wall-title { margin: 0; color: #000; font-family: "Caveat", "Comic Sans MS", cursive; font-size: 30px; font-weight: 700; letter-spacing: 0; line-height: 1; }
+  .wall-subtitle { margin-top: 3px; color: #000; font-size: 12px; font-weight: 500; letter-spacing: .025em; }
   .header-tools { display: flex; align-items: center; gap: 22px; }
   .wall-meta { display: flex; align-items: center; gap: 14px; }
   .wall-mode, .wall-count {
@@ -260,7 +260,7 @@
     min-height: 34px;
     align-items: center;
     gap: 8px;
-    color: #d8e6d9;
+    color: #000;
     font-size: 13px;
     font-weight: 650;
     white-space: nowrap;
@@ -279,9 +279,9 @@
     box-shadow: 0 0 12px rgba(136, 213, 160, .6);
     content: "";
   }
-  .wall-mode.ended { border-color: rgba(240, 197, 138, .25); background: rgba(143, 102, 52, .2); color: #f2dfbe; }
+  .wall-mode.ended { border-color: rgba(240, 197, 138, .25); background: rgba(143, 102, 52, .2); color: #000; }
   .wall-mode.ended::before { background: #edbd76; box-shadow: none; }
-  .wall-count { color: #b6c8ba; font-weight: 550; }
+  .wall-count { color: #000; font-weight: 550; }
   .end-btn, .end-btn.resume {
     display: grid;
     width: 46px;
@@ -291,7 +291,7 @@
     border: 1px solid rgba(218, 234, 215, .22);
     border-radius: 50%;
     background: rgba(246, 245, 232, .08);
-    color: #f7f4e9;
+    color: #000;
     box-shadow: none;
     cursor: pointer;
     transition: background-color .16s ease, border-color .16s ease, transform .16s ease;
@@ -299,7 +299,7 @@
   .end-btn svg { width: 22px; height: 22px; }
   .end-btn:hover, .end-btn.resume:hover { transform: translateY(-1px); border-color: rgba(218, 234, 215, .42); background: rgba(246, 245, 232, .14); }
   .end-btn:focus-visible, .del-btn:focus-visible { outline: 3px solid #d6e8ca; outline-offset: 3px; }
-  .end-btn.resume { border-color: #9dc5a6; background: #d8e9d8; color: #1d4732; }
+  .end-btn.resume { border-color: #9dc5a6; background: #d8e9d8; color: #000; }
   .end-btn.resume:hover { border-color: #c4dfc8; background: #e7f2e5; }
   .lanes {
     top: 112px;
@@ -338,7 +338,7 @@
   }
   .del-btn:hover { background: #8e352d; }
   @media (max-width: 640px) {
-    .header { top: 32px; padding: 6px 18px; }
+    .header { top: 54px; padding: 6px 18px; }
     .wall-brand { gap: 8px; }
     .wall-mark { width: 76px; height: 34px; }
     .wall-title { font-size: 22px; }
